@@ -77,7 +77,7 @@ class Board:
         :return:
         """
         value = self.board[row][column]
-        if value is not '_':
+        if value != '_':
             self.board[row][column] = '_'
             return value
         else:
