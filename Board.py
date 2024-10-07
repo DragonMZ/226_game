@@ -1,5 +1,6 @@
 import random
 
+
 class Board:
 
     def __init__(self, size: int, ships: int):
@@ -11,13 +12,17 @@ class Board:
         try:
             self.size = size
             self.ships = ships
-            if 1 > size or 1 > ships:
-                raise ValueError('Value less than 1')
+            if 2 > size:
+                raise ValueError('Board size cant be less than 2')
+            if 1 > ships:
+                raise ValueError('Ship number must be greater than 0')
             if ships > size:
                 raise ValueError('Ship length cant be greater than board size')
         except ValueError as details:
-            print(str(details))
+            raise ValueError(details) from details
+
         self.board = [['_' for k in range(self.size)] for k in range(self.size)]
+        self.place_ships()
 
     def __str__(self):
         """
@@ -25,9 +30,9 @@ class Board:
         :return:
         """
         string = ''
-        for j in range(len(self.board)):
-            for i in range(len(self.board)):
-                string += str(self.board[j][i])
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                string += str(self.board[i][j])
             string += '\n'
         return string
 
@@ -43,8 +48,8 @@ class Board:
         for i in range(1, self.ships + 1):
             count = 1
             direction = random.randrange(3)
-            row = random.randrange(10)
-            column = random.randrange(10)
+            row = random.randrange(self.size)
+            column = random.randrange(self.size)
             self.board[row][column] = i
             while count < i:
                 match direction:
@@ -67,14 +72,37 @@ class Board:
                 self.board[row][column] = i
                 count += 1
 
-    def pick(self, row: int, column: int) -> int:
+    def get_coordinate(self, dot) -> int:
+        """
+        gets the user input, decrements it for board logic then error checks it
+        if valid returns it, if invalid returns -1 as an error code
+        :param dot: user input
+        :return: int within board size or -1 if fail
+        """
+        try:
+            dot -= 1
+        except TypeError:
+            print('Not an integer')
+            return -1
+        try:
+            if 0 > dot:
+                raise ValueError ('Out of bounds')
+            if dot > self.size - 1:
+                raise ValueError ('Out of bounds')
+        except ValueError as details:
+            print(str(details))
+            return -1
+        else:
+            return dot
+
+    def pick(self, row: int, column: int):
         """
         if the chosen coordinate has a value thats not _
         it returns the number that was there and sets the spot to _
         otherwise returns 0
         :param row: user input an int for row
         :param column:  user input an int for column
-        :return:
+        :return: int
         """
         value = self.board[row][column]
         if value != '_':
