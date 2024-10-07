@@ -1,16 +1,26 @@
-# This is a sample Python script.
+from Board import Board
+from Player import Player
+b = Board(10, 4)
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('Hello World')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+p = Player('One')
+"""
+prints the player name and score, then the visual of the board
+asks for a row and column number, if numbers less than 0, not an int or bigger than board size throws error
+if successful checks that coordinate and adds to the score (blanks return a score of zero)
+runs infinitely currently
+"""
+while True:
+    print(p)
+    print(b)
+    while True:
+        row = b.get_coordinate(input('input row '))
+        if row == -1:
+            continue
+        break
+    while True:
+        column = b.get_coordinate(input('input column '))
+        if column == -1:
+            continue
+        break
+    shot = b.pick(row,column)
+    p.add_score(shot)
