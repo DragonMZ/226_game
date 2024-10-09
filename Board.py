@@ -47,7 +47,7 @@ class Board:
         """
         for i in range(1, self.ships + 1):
             count = 1
-            direction = random.randrange(3)
+            direction = random.randrange(4)
             row = random.randrange(self.size)
             column = random.randrange(self.size)
             self.board[row][column] = i
