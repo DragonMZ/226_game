@@ -80,14 +80,14 @@ class Board:
         :return: int within board size or -1 if fail
         """
         try:
-            dot -= 1
+            dot += 0
         except TypeError:
             print('Not an integer')
             return -1
         try:
             if 0 > dot:
                 raise ValueError ('Out of bounds')
-            if dot > self.size - 1:
+            if dot > self.size:
                 raise ValueError ('Out of bounds')
         except ValueError as details:
             print(str(details))

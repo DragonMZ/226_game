@@ -33,9 +33,9 @@ def test_board():
 def test_coordinate():
     b = Board(10, 4)
     assert b.get_coordinate('abc') == -1
-    assert b.get_coordinate(0) == -1
+    assert b.get_coordinate(-2) == -1
     assert b.get_coordinate(11) == -1
-    assert b.get_coordinate(1) == 0
+    assert b.get_coordinate(1) == 1
 
 def test_pick():
     b = Board(10, 4)
@@ -56,9 +56,9 @@ def test_practice_game():
     assert p.score == 0
     assert b.size == 5
     assert b.ships == 2
-    row = b.get_coordinate(4)
+    row = b.get_coordinate(3)
     assert row == 3
-    column = b.get_coordinate(5)
+    column = b.get_coordinate(4)
     assert column == 4
     shot = b.pick(row,column)
     assert shot == 2
