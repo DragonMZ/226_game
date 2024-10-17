@@ -1,6 +1,5 @@
 from Player import Player
 import random
-random.seed(10)
 
 def test_player():
     p = Player("TestPlayer")
@@ -31,6 +30,7 @@ def test_board():
     b = Board(15, 5)
 
 def test_coordinate():
+    random.seed(10)
     b = Board(10, 4)
     assert b.get_coordinate('abc') == -1
     assert b.get_coordinate(-2) == -1
@@ -38,33 +38,35 @@ def test_coordinate():
     assert b.get_coordinate(1) == 1
 
 def test_pick():
+    random.seed(10)
     b = Board(10, 4)
     print(b)
     assert b.pick(0,0) == 0
-    assert b.pick(9,8) == 3
-    assert b.pick(9, 8) == 0
+    assert b.pick(4,2) == 3
+    assert b.pick(4, 2) == 0
 
 def test_print():
     b = Board(5, 2)
     print(b)
 
 def test_practice_game():
-    b = Board(5,2)
+    random.seed(10)
+    b = Board(10,4)
     print(b)
     p = Player('One')
     assert p.name == 'One'
     assert p.score == 0
-    assert b.size == 5
-    assert b.ships == 2
-    row = b.get_coordinate(3)
-    assert row == 3
-    column = b.get_coordinate(4)
-    assert column == 4
+    assert b.size == 10
+    assert b.ships == 4
+    row = b.get_coordinate(5)
+    assert row == 5
+    column = b.get_coordinate(7)
+    assert column == 7
     shot = b.pick(row,column)
-    assert shot == 2
+    assert shot == 4
     assert b.pick(row, column) == 0
     p.add_score(shot)
-    assert p.score == 2
+    assert p.score == 4
 
 @pytest.mark.parametrize('execution_number', range(5))
 def test_game(execution_number):

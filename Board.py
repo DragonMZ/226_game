@@ -72,9 +72,9 @@ class Board:
                 self.board[row][column] = i
                 count += 1
 
-    def get_coordinate(self, dot) -> int:
+    def get_coordinate(self, dot: int) -> int:
         """
-        gets the user input, decrements it for board logic then error checks it
+        gets the user input, error checks it
         if valid returns it, if invalid returns -1 as an error code
         :param dot: user input
         :return: int within board size or -1 if fail
@@ -95,7 +95,7 @@ class Board:
         else:
             return dot
 
-    def pick(self, row: int, column: int):
+    def pick(self, row: int, column: int)->int:
         """
         if the chosen coordinate has a value thats not _
         it returns the number that was there and sets the spot to _
