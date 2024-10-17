@@ -1,13 +1,14 @@
 from Board import Board
 from Player import Player
+from struct import pack, unpack
 from socket import (
     socket,
     AF_INET,
     SOCK_STREAM,
     SOL_SOCKET,
-    SO_REUSEADDR
+    SO_REUSEADDR,
 )
-import struct
+
 
 HOST = '0.0.0.0'
 PORT = 12345
@@ -17,8 +18,9 @@ b = Board(10, 4)
 p = Player('One')
 """
 prints the player name and score, then the visual of the board
-asks for a row and column number, if numbers less than 0, not an int or bigger than board size throws error
-if successful checks that coordinate and adds to the score (blanks return a score of zero)
+Opens a net connection, waits to receive 1 byte of data, the first 4 bits become the row
+the second 4 bits become the column, if out of range it disconnects, sends back
+the players score as two unsigned shorts, first being the score, second being zero
 runs infinitely currently
 """
 with socket(AF_INET, SOCK_STREAM) as sock:
@@ -40,4 +42,4 @@ with socket(AF_INET, SOCK_STREAM) as sock:
             print('Attack received:', client, ' ', hexData, ' ', row, ' ', column)
             shot = b.pick(row,column)
             p.add_score(shot)
-            sc.sendall(struct.pack('!HH', p.get_score(), 0))
+            sc.sendall(pack('!HH', p.get_score(), 0))
