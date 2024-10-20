@@ -10,7 +10,6 @@ from time import sleep
 #
 
 
-BUF_SIZE = 1024
 HOST = '127.0.0.1'
 PORT = 12345
 
@@ -22,11 +21,11 @@ first_run = True
 #
 
 
-def get_data(client: socket) -> bytes:
+def get_data(client: socket, n: int) -> bytes:
     buffer = b''
     size = 0
     print('Client', client.getsockname(), 'waiting for data')
-    while size < BUF_SIZE:
+    while size < n:
         data = client.recv(1)
         size += 1
         if data == b'':
@@ -37,14 +36,11 @@ def get_data(client: socket) -> bytes:
     return buffer
 
 
-def put_data(data: str) -> bytes:
-    client = socket(AF_INET, SOCK_STREAM)
-    client.connect((HOST, PORT))
+def put_data(client: socket, data: str) -> bytes:
     encoded_data = bytes.fromhex(data)
     print('Client', client.getsockname(), 'sending', data, '(', encoded_data.hex(), ')')
     client.sendall(encoded_data)
-    response = get_data(client)
-    client.close()
+    response = get_data(client, 4)
     return response
 
 
@@ -117,25 +113,80 @@ def restart_container():
 #  TEST CODE
 #
 
-def get_scores(result: bytes) -> int:
+def get_scores(result: bytes) -> [int]:
     score1 = unpack('!H', result[0:2])[0]
     score2 = unpack('!H', result[2:4])[0]
-    assert score2 == 0
-    return score1
+    return [score1, score2]
 
 
-@pytest.mark.parametrize('execution_number', range(5))
-def test_board(execution_number):
+
+def test_board_with_one_player():
     v = 0
+
+    client = socket(AF_INET, SOCK_STREAM)
+    client.connect((HOST, PORT))
+
+    data = get_data(client, 2)
+    name_len = unpack('!H', data)[0]
+    name = get_data(client, name_len).decode()
+    assert name == "One"
 
     for i in range(10):
         for j in range(10):
-            reply = put_data(str(i) + str(j))
+            reply = put_data(client, str(i) + str(j))
             score = get_scores(reply)
-            assert score >= 0
-            v += score
+            assert score[0] >= 0
+            assert score[1] == 0
+            v += score[0]
 
     assert v >= 16
+
+    put_data(client, "99")
+
+    client.close()
+
+
+def test_board_with_two_players():
+    v = 0
+
+    client1 = socket(AF_INET, SOCK_STREAM)
+    client1.connect((HOST, PORT))
+
+    data = get_data(client1, 2)
+    name_len = unpack('!H', data)[0]
+    name = get_data(client1, name_len).decode()
+    assert name == "One"
+
+    client2 = socket(AF_INET, SOCK_STREAM)
+    client2.connect((HOST, PORT))
+
+    data = get_data(client2, 2)
+    name_len = unpack('!H', data)[0]
+    name = get_data(client2, name_len).decode()
+    assert name == "Two"
+
+    for i in range(10):
+        for j in range(10):
+            if (i + j) % 2 == 0:
+                client = client1
+                c = 0
+                d = 1
+            else:
+                client = client2
+                c = 1
+                d = 0
+            reply = put_data(client, str(i) + str(j))
+            score = get_scores(reply)
+            assert score[c] >= 0
+            assert score[d] >= 0
+            v += score[c]
+
+    assert v >= 16
+
+    put_data(client, "99")
+
+    client1.close()
+    client2.close()
 
 #
 #  DO NOT CHANGE THE CODE ABOVE

@@ -87,7 +87,7 @@ class Board:
         try:
             if 0 > dot:
                 raise ValueError ('Out of bounds')
-            if dot > self.size:
+            if dot > self.size - 1:
                 raise ValueError ('Out of bounds')
         except ValueError as details:
             print(str(details))
