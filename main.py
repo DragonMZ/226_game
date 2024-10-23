@@ -30,7 +30,7 @@ the second short is always zero unless there is an error.
 after getting valid coordinate it locks until it has converted the board value and added to score then after releasing
 it will send the score off. reprints the board and player who just shot afterwards
 """
-def handle_player(c_socket):
+def handle_player(c_socket) -> None:
     with c_socket:
         name = PLAYER_NAMES[active_count() - 2]
         data = name.encode('utf-8')  # Convert command line arg to binary
@@ -48,8 +48,8 @@ def handle_player(c_socket):
             print('Attack received:', client, ' ', row, ' ', column)
             lock.acquire()
             shot = b.pick(row,column)
-            p.add_score(shot)
             lock.release()
+            p.add_score(shot)
             c_socket.sendall(pack('!HH', p.get_score(), 0))
             print(b)
             print(p)
@@ -58,7 +58,7 @@ def handle_player(c_socket):
 Starts a server, when it gets a connection, if there is less than the number of users
 it will start a new thread. So multiple people are shooting the same board.
 """
-def start_server():
+def start_server() -> None:
     s_sock = socket(AF_INET, SOCK_STREAM)
     s_sock.setsockopt(SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 1)
     s_sock.bind((HOST, PORT))
@@ -69,7 +69,7 @@ def start_server():
         if active_count() <= CONNECTIONS:
             t.start()
         else:
-            print("Too many connections")
+            print("Connection Refused")
             sc.close()
 
 

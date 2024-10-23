@@ -1,5 +1,5 @@
 class Player:
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         """
         Initialize player with chosen name and base score of 0
         :param name:
@@ -14,7 +14,7 @@ class Player:
         """
         return self.score
 
-    def add_score(self, score: int):
+    def add_score(self, score: int) -> None:
         """
         adds sent value to score
         :param score:
@@ -22,7 +22,7 @@ class Player:
         """
         self.score += score
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         prints the player name and score
         :return:
