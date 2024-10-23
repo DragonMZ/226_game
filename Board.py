@@ -3,7 +3,7 @@ import random
 
 class Board:
 
-    def __init__(self, size: int, ships: int):
+    def __init__(self, size: int, ships: int) -> None:
         """
         initializes the board, board size cant be negative and ship size cant be bigger than the board
         :param size: grid size, ie a 10x10 board
@@ -24,7 +24,7 @@ class Board:
         self.board = [['_' for k in range(self.size)] for k in range(self.size)]
         self.place_ships()
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         returns the values of the board as a string
         :return:
@@ -36,7 +36,7 @@ class Board:
             string += '\n'
         return string
 
-    def place_ships(self):
+    def place_ships(self) -> None:
         """
         picks a random row, column and orientation (left, right, up, down)
         places 1 spot for ship 1, 2 spots for ship 2 etc.
@@ -87,7 +87,7 @@ class Board:
         try:
             if 0 > dot:
                 raise ValueError ('Out of bounds')
-            if dot > self.size:
+            if dot > self.size - 1:
                 raise ValueError ('Out of bounds')
         except ValueError as details:
             print(str(details))
@@ -95,7 +95,7 @@ class Board:
         else:
             return dot
 
-    def pick(self, row: int, column: int)->int:
+    def pick(self, row: int, column: int) -> int:
         """
         if the chosen coordinate has a value thats not _
         it returns the number that was there and sets the spot to _
