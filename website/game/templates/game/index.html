@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Welcome to the Game</title>
+    </head>
+    <body>
+        <div>
+            <h1>Wanna play a game?</h1>
+            <h3>Board</h3>
+            {% if board %}
+<!--            Prints out the grid of tiles, making a new line on every 9th column-->
+            <div>
+                <table>
+                    <tr>
+                    {% for tile in board %}
+                        <td>{{tile.value}}</td>
+                        {% if tile.col == 9%}
+                        </tr><tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            {% else %}
+            <p>Board not generated</p>
+            {% endif %}
+            <h3>Players</h3>
+<!--            displays the players-->
+            {% if player_list %}
+            <ul>
+                {% for player in player_list %}
+                <li>Player {{player.name}}: {{player.score}} point(s)</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p>No players.</p>
+            {% endif %}
+        </div>
+    </body>
+</html>
