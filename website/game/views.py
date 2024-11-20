@@ -29,16 +29,20 @@ def create(request):
             Tile.create_tile(row=i, col=j).save()
 
     #picks the random spots for the treasures
-    for i in range(NUM_TREASURES):
+    i = 0
+    while i < NUM_TREASURES:
         row = random.randrange(BOARD_SIZE)
         col = random.randrange(BOARD_SIZE)
 
         tiles = Tile.objects.filter(row=row, col=col)
         if len(tiles) == 1:
             tile = tiles[0]
+            # checks to avoid overwriting a treasure
+            if tile.value == 1:
+                continue
             tile.value = 1
             tile.save()
-
+            i += 1
     return redirect(index)
 
 """lets the player select the board throw /pick/player_name/row/col and serves
