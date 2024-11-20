@@ -21,7 +21,7 @@ class Tile(models.Model):
         return model
 
     def __str__(self):
-        return f'{self.value}'
+        return f'[{self.row},{self.col}] ({self.value})'
 
 #makes a player with a name and gives them a score of 0
 class Player(models.Model):
