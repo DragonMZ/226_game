@@ -10,7 +10,7 @@ NUM_TREASURES = 4
 """Main page, just gets all the players and tiles and displays them"""
 def index(request):
     players = Player.objects.all()
-    tiles = Tile.objects.all()
+    tiles = Tile.objects.all().order_by('row', 'col').values()
     context = {'board': tiles, 'player_list': players}
     return render(request, 'game/index.html', context)
 
