@@ -8,6 +8,10 @@ pytest = "*"
 coverage = "*"
 cryptography = "*"
 django = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
